@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#12050a" />
+  <title>Sparking Zero — Modos + Roleta 1v1</title>
+
+  <style>
+    :root{
+      --bg:#12050a;
+      --panel:#1a0810;
+      --panel2:#16060d;
+      --line:rgba(255,255,255,.10);
+
+      --text:#fff1f4;
+      --muted:#f3b6c1;
+
+      --accent:#ff2d55;
+      --accent2:#ff5c7a;
+      --good:#26e6a7;
+      --warn:#ffcc66;
+      --bad:#ff3b5c;
+
+      --shadow: 0 18px 45px rgba(0,0,0,.45);
+      --radius:18px;
+
+      --reelRowH: 48px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(900px 520px at 15% 10%, rgba(255,45,85,.25), transparent 55%),
+        radial-gradient(900px 520px at 85% 18%, rgba(255,92,122,.18), transparent 55%),
+        radial-gradient(900px 520px at 50% 90%, rgba(255,204,102,.10), transparent 55%),
+        var(--bg);
+    }
+
+    header{
+      padding:18px 16px 10px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(18,5,10,.88), rgba(18,5,10,.55));
+      border-bottom:1px solid var(--line);
+    }
+    .top{
+      max-width:1200px;
+      margin:0 auto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    h1{ margin:0; font-size:18px; letter-spacing:.2px; }
+    .sub{ margin-top:6px; color:var(--muted); font-size:12.5px; line-height:1.35; }
+
+    main{ max-width:1200px; margin:0 auto; padding:14px 16px 34px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 35%),
+        var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:14px;
+    }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    label{ display:block; color:var(--muted); font-size:12px; margin-bottom:6px; }
+
+    input, select, textarea, button{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 14px;
+      padding:10px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{ width:100%; min-height:110px; resize:vertical; line-height:1.35; }
+
+    button{
+      cursor:pointer;
+      user-select:none;
+      transition: transform .06s ease, filter .15s ease;
+    }
+    button:active{ transform: scale(.98); }
+    button:hover{ filter: brightness(1.05); }
+
+    .btn-accent{
+      background: linear-gradient(180deg, rgba(255,45,85,.25), rgba(255,45,85,.14));
+      border-color: rgba(255,45,85,.55);
+    }
+    .btn-good{
+      background: linear-gradient(180deg, rgba(38,230,167,.18), rgba(38,230,167,.10));
+      border-color: rgba(38,230,167,.45);
+    }
+    .btn-warn{
+      background: linear-gradient(180deg, rgba(255,204,102,.18), rgba(255,204,102,.10));
+      border-color: rgba(255,204,102,.50);
+    }
+    .btn-bad{
+      background: linear-gradient(180deg, rgba(255,59,92,.22), rgba(255,59,92,.12));
+      border-color: rgba(255,59,92,.55);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .pill b{ color:var(--text); }
+
+    .hr{ height:1px; background: var(--line); margin:12px 0; }
+
+    .teamGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 720px){ .teamGrid{ grid-template-columns: 1fr; } }
+
+    .teamBox{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:10px;
+      background: rgba(255,255,255,.03);
+    }
+    .teamBox h3{ margin:0 0 8px; font-size:14px; letter-spacing:.2px; }
+    ol{ margin:0; padding-left:18px; }
+    .meta{ color:var(--muted); font-size:12px; margin-top:8px; }
+
+    .tagRow{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .tag{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+
+    /* TOP RULE BOX */
+    .topRule{
+      border-radius: 18px;
+      border: 1px solid rgba(255,45,85,.45);
+      background:
+        radial-gradient(800px 220px at 20% 10%, rgba(255,45,85,.22), transparent 55%),
+        radial-gradient(800px 220px at 80% 10%, rgba(255,92,122,.14), transparent 55%),
+        rgba(255,255,255,.03);
+      padding:12px;
+    }
+    .topRule h2{
+      margin:0 0 6px;
+      font-size:13.5px;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .topRule .txt{
+      font-size:12.5px;
+      color:var(--text);
+      line-height:1.35;
+      white-space:pre-wrap;
+    }
+    .topRule .hint{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    /* ROULETTE */
+    .rouletteWrap{ display:grid; gap:12px; }
+    .reelShell{
+      border-radius: 18px;
+      border: 1px solid rgba(255,45,85,.38);
+      background:
+        radial-gradient(600px 180px at 50% 30%, rgba(255,45,85,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.12)),
+        var(--panel2);
+      box-shadow: 0 14px 36px rgba(0,0,0,.42);
+      overflow:hidden;
+      position:relative;
+      height: calc(var(--reelRowH) * 5);
+    }
+    .reel{
+      position:absolute;
+      left:0; right:0;
+      top:0;
+      will-change: transform;
+      transform: translateY(0px);
+    }
+    .reelRow{
+      height: var(--reelRowH);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 14px;
+      text-align:center;
+      font-weight:800;
+      letter-spacing:.2px;
+      color: var(--text);
+      border-top: 1px solid rgba(255,255,255,.06);
+      text-shadow: 0 2px 10px rgba(0,0,0,.35);
+    }
+    .reelRow:nth-child(odd){ background: rgba(0,0,0,.10); }
+
+    .window{
+      position:absolute;
+      left:0; right:0;
+      top:50%;
+      transform: translateY(-50%);
+      height: var(--reelRowH);
+      border-top: 1px solid rgba(255,45,85,.65);
+      border-bottom: 1px solid rgba(255,45,85,.65);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,45,85,.18),
+        0 0 0 999px rgba(0,0,0,.10);
+      pointer-events:none;
+    }
+    .glow{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: linear-gradient(to bottom,
+        rgba(18,5,10,.90),
+        rgba(18,5,10,.15) 22%,
+        rgba(18,5,10,0) 40%,
+        rgba(18,5,10,0) 60%,
+        rgba(18,5,10,.15) 78%,
+        rgba(18,5,10,.90)
+      );
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      background: rgba(20,7,12,.92);
+      border:1px solid var(--line);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      display:none;
+      z-index: 99;
+      max-width: 92vw;
+      font-size: 13px;
+    }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .tiny{ font-size:12px; color:var(--muted); line-height:1.35; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="top">
+    <div>
+      <h1>🎮 Sparking Zero — Modos + Roleta 1v1 (Online)</h1>
+      <div class="sub">
+        Regras aleatórias + times automáticos + roleta “slot” que para <b>exatamente</b> no nome.
+      </div>
+    </div>
+    <div class="row" style="align-items:flex-start">
+      <button class="btn-accent" id="btnAddToHome">📲 iPhone</button>
+      <button class="btn-bad" id="btnResetAll">🧨 Reset</button>
+    </div>
+  </div>
+</header>
+
+<main class="grid">
+  <section class="card">
+    <div class="topRule">
+      <h2>🔥 Regra atual</h2>
+      <div class="txt" id="topRuleText">Toque em <b>Gerar regra</b> para começar.</div>
+      <div class="hint">Dica: a regra fica fixa aqui em cima.</div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row" style="justify-content:space-between; align-items:flex-end;">
+      <div style="flex:1; min-width:240px;">
+        <label>Modo de regras</label>
+        <select id="cfgMode" style="width:100%;">
+          <option value="classic">Clássico (4 roletas)</option>
+          <option value="competitive">Competitivo (menos caos)</option>
+          <option value="chaos">Caos (zoeira)</option>
+        </select>
+      </div>
+      <div class="row">
+        <span class="pill">Personagens: <b id="rosterCount">0</b></span>
+        <span class="pill">Fonte: <b id="rosterSource">embutido</b></span>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <div style="min-width:170px;">
+        <label>Slots por jogador</label>
+        <select id="cfgSlots">
+          <option value="1">1</option>
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+        </select>
+      </div>
+
+      <div style="min-width:220px;">
+        <label>Repetir entre A e B?</label>
+        <select id="cfgAllowAcross">
+          <option value="no" selected>Não</option>
+          <option value="yes">Sim</option>
+        </select>
+      </div>
+
+      <div style="flex:1; min-width:220px;">
+        <label>Filtro (opcional, separado por vírgula)</label>
+        <input id="cfgFilter" placeholder="Ex: goku, vegeta, piccolo" />
+      </div>
+
+      <div style="flex:1; min-width:220px;">
+        <label>Excluir (opcional, separado por vírgula)</label>
+        <input id="cfgExclude" placeholder="Ex: fusion, ui, giant" />
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row">
+      <button class="btn-accent" id="btnGenRule">🎰 Gerar regra</button>
+      <button class="btn-good" id="btnGenTeams">⚔️ Gerar TIMES (A e B)</button>
+      <button class="btn-warn" id="btnCopyAll">📋 Copiar (regra + times)</button>
+      <button class="btn-accent" id="btnUpdateRoster">🔄 Recarregar personagens</button>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="row" style="margin-bottom:10px;">
+      <span class="pill">Modo: <b id="pillMode">—</b></span>
+      <span class="pill">Time: <b id="pillTeam">—</b></span>
+      <span class="pill">Restrição: <b id="pillRestrict">—</b></span>
+      <span class="pill">Modificador: <b id="pillMod">—</b></span>
+    </div>
+
+    <label>Regra completa (pra copiar/editar)</label>
+    <textarea id="ruleBox" class="mono" spellcheck="false"></textarea>
+
+    <div class="hr"></div>
+
+    <div class="teamGrid">
+      <div class="teamBox">
+        <h3>Jogador A</h3>
+        <ol id="teamA"></ol>
+        <div class="meta" id="metaA">—</div>
+      </div>
+      <div class="teamBox">
+        <h3>Jogador B</h3>
+        <ol id="teamB"></ol>
+        <div class="meta" id="metaB">—</div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <label>Adicionar personagem (quando sair DLC novo)</label>
+    <div class="row">
+      <input id="addName" placeholder="Nome ex.: Super 17" style="flex:1; min-width:200px;" />
+      <button class="btn-good" id="btnAddChar">➕ Adicionar</button>
+      <button class="btn-bad" id="btnClearCustom">🧽 Limpar custom</button>
+    </div>
+    <div class="tiny">“Adicionar” salva no seu aparelho. Se quiser fixar no projeto, depois copie pro array STATIC_ROSTER.</div>
+  </section>
+
+  <aside class="card">
+    <h3 style="margin:0 0 10px; font-size:14px;">🎰 Roleta (slot) — para exatamente no nome</h3>
+
+    <div class="rouletteWrap">
+      <div class="reelShell" aria-label="Roleta de personagens">
+        <div class="reel" id="reel"></div>
+        <div class="window"></div>
+        <div class="glow"></div>
+      </div>
+
+      <div class="row">
+        <button class="btn-accent" id="btnSpinOne">🎰 Girar 1 personagem</button>
+        <button class="btn-good" id="btnSpinToA">➡️ Girar e colocar no A</button>
+        <button class="btn-good" id="btnSpinToB">➡️ Girar e colocar no B</button>
+      </div>
+
+      <div class="tagRow">
+        <span class="tag" id="spinResult">Resultado: —</span>
+        <span class="tag">Online 1v1</span>
+        <span class="tag">Anti-enjoo</span>
+      </div>
+
+      <div class="tiny" style="margin-top:6px;">
+        A roleta usa “snap” por altura de linha, então termina sempre alinhada na janela do meio.
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ==========================================================
+  // ✅ PERSONAGENS EMBUTIDOS (208) — base + DLCs
+  // Fontes:
+  // - Base 182 (PowerPyx): https://www.powerpyx.com/dragon-ball-sparking-zero-full-roster-all-characters/  [oai_citation:5‡PowerPyx](https://www.powerpyx.com/dragon-ball-sparking-zero-full-roster-all-characters/)
+  // - Super Hero pack (11): https://en.bandainamcoent.eu/.../dragon-ball-sparking-zero-dlc-adds-11-characters...  [oai_citation:6‡Bandai Namco Europe](https://en.bandainamcoent.eu/dragon-ball/news/dragon-ball-sparking-zero-dlc-adds-11-characters-dragon-ball-super-super-hero?utm_source=chatgpt.com)
+  // - DAIMA pack 1 (8): PS Store  [oai_citation:7‡PlayStation Store](https://store.playstation.com/pt-br/product/UP0700-PPSA15211_00-DBSZ0CHADAIMAPC1?utm_source=chatgpt.com)
+  // - DAIMA pack 2 (6): Bandai US  [oai_citation:8‡Bandai Namco Entertainment](https://www.bandainamcoent.com/news/dragon-ball-sparking-zero-character-pack-2-adds-six-iconic-new-fighters?utm_source=chatgpt.com)
+  // - Shallot (1): Steam  [oai_citation:9‡Steam Store](https://store.steampowered.com/app/3693250/DRAGON_BALL_Sparking_ZERO__Shallot_DRAGON_BALL_LEGENDS/?utm_source=chatgpt.com)
+  // ==========================================================
+
+  const STATIC_ROSTER = [
+    // ===== BASE (182) =====
+    "Goku (Z - Early)",
+    "Goku (Z - Mid)",
+    "Goku (Z - Mid), Super Saiyan",
+    "Goku (Z - End)",
+    "Goku (Z - End), Super Saiyan",
+    "Goku (Z - End), Super Saiyan 2",
+    "Goku (Z - End), Super Saiyan 3",
+    "Goku (Super)",
+    "Goku (Super), Super Saiyan",
+    "Goku (Super), Super Saiyan God",
+    "Goku (Super), Super Saiyan God Super Saiyan",
+    "Goku (Super), Ultra Instinct -Sign-",
+    "Goku (Super), Ultra Instinct",
+    "Goku (GT)",
+    "Goku (GT), Super Saiyan",
+    "Goku (GT), Super Saiyan 3",
+    "Goku (GT), Super Saiyan 4",
+    "Goku (Teen)",
+    "Goku (Mini) [Pre-Order]",
+    "Vegeta (Z - Scouter)",
+    "Great Ape Vegeta",
+    "Vegeta (Z - Early)",
+    "Vegeta (Z - Early), Super Saiyan",
+    "Super Vegeta",
+    "Vegeta (Z - End)",
+    "Vegeta (Z - End), Super Saiyan",
+    "Vegeta (Z - End), Super Saiyan 2",
+    "Majin Vegeta",
+    "Vegeta (Super)",
+    "Vegeta (Super), Super Saiyan",
+    "Vegeta (Super), Super Saiyan God",
+    "Vegeta (Super), Super Saiyan God Super Saiyan",
+    "Vegeta (GT), Super Saiyan 4",
+    "Gohan (Kid)",
+    "Gohan (Teen)",
+    "Gohan (Teen), Super Saiyan",
+    "Gohan (Teen), Super Saiyan 2",
+    "Gohan (Adult)",
+    "Gohan (Adult), Super Saiyan",
+    "Gohan (Adult), Super Saiyan 2",
+    "Great Saiyaman",
+    "Ultimate Gohan",
+    "Gohan (Future)",
+    "Gohan (Future), Super Saiyan",
+    "Piccolo",
+    "Piccolo (Fused with Kami)",
+    "Nail",
+    "Krillin",
+    "Yamcha",
+    "Tien",
+    "Trunks (Sword)",
+    "Trunks (Sword), Super Saiyan",
+    "Trunks (Melee)",
+    "Trunks (Melee), Super Saiyan",
+    "Super Trunks",
+    "Future Trunks",
+    "Future Trunks, Super Saiyan",
+    "Trunks (Kid)",
+    "Trunks (Kid), Super Saiyan",
+    "Goten",
+    "Goten, Super Saiyan",
+    "Vegito",
+    "Super Vegito",
+    "Vegito, Super Saiyan God Super Saiyan",
+    "Super Gogeta (Z)",
+    "Gogeta (Super)",
+    "Gogeta (Super), Super Saiyan",
+    "Gogeta (Super), Super Saiyan God Super Saiyan",
+    "Gogeta (GT), Super Saiyan 4",
+    "Gotenks",
+    "Gotenks, Super Saiyan",
+    "Gotenks, Super Saiyan 3",
+    "Videl",
+    "Master Roshi",
+    "Master Roshi, Max Power",
+    "Frieza (Z), 1st Form",
+    "Frieza (Z), 2nd Form",
+    "Frieza (Z), 3rd Form",
+    "Frieza (Z), 4th Form",
+    "Frieza (Z), Full Power",
+    "Mecha Frieza",
+    "Frieza (Super)",
+    "Golden Frieza",
+    "Cell, 1st Form",
+    "Cell, 2nd Form",
+    "Cell, Perfect Form",
+    "Perfect Cell",
+    "Cell Jr.",
+    "Majin Buu",
+    "Majin Buu (Evil)",
+    "Super Buu",
+    "Super Buu (Gotenks Absorbed)",
+    "Super Buu (Gohan Absorbed)",
+    "Kid Buu",
+    "Mr. Satan",
+    "Chiaotzu",
+    "Yajirobe",
+    "Pan (GT)",
+    "Uub (GT)",
+    "Majuub (GT)",
+    "Bardock",
+    "Raditz",
+    "Saibaman",
+    "Nappa",
+    "Zarbon",
+    "Super Zarbon",
+    "Dodoria",
+    "Cui",
+    "Captain Ginyu",
+    "Recoome",
+    "Burter",
+    "Jeice",
+    "Guldo",
+    "King Cold",
+    "Android 16",
+    "Android 17 (Z)",
+    "Android 17 (Super)",
+    "Android 18",
+    "Android 19",
+    "Dr. Gero",
+    "Babidi",
+    "Dabura",
+    "Frieza Force Soldier",
+    "Broly (Z)",
+    "Broly (Z), Super Saiyan",
+    "Broly (Z), Legendary Super Saiyan",
+    "Broly (Super)",
+    "Broly (Super), Super Saiyan",
+    "Broly (Super), Super Saiyan (Full Power)",
+    "Super Garlic Jr.",
+    "Dr. Wheelo",
+    "Turles",
+    "Lord Slug",
+    "Lord Slug, Giant Form",
+    "Cooler",
+    "Cooler, Final Form",
+    "Metal Cooler",
+    "Android 13",
+    "Fusion Android 13",
+    "Bojack",
+    "Full-Power Bojack",
+    "Janemba",
+    "Super Janemba",
+    "Tapion",
+    "Hirudegarn",
+    "Baby Vegeta (GT)",
+    "Super Baby 1 (GT)",
+    "Super Baby 2 (GT)",
+    "Great Ape Baby (GT)",
+    "Syn Shenron (GT)",
+    "Omega Shenron (GT)",
+    "Spopovich",
+    "Beerus",
+    "Whis",
+    "Goku Black",
+    "Goku Black, Super Saiyan Rosé",
+    "Zamasu",
+    "Fused Zamasu",
+    "Fused Zamasu, Half-Corrupted",
+    "Hit",
+    "Frost",
+    "Cabba",
+    "Cabba, Super Saiyan",
+    "Cabba, Super Saiyan 2",
+    "Caulifla",
+    "Caulifla, Super Saiyan 2",
+    "Kale",
+    "Kale, Super Saiyan (Berserk)",
+    "Kale, Super Saiyan",
+    "Kefla",
+    "Kefla, Super Saiyan",
+    "Kefla, Super Saiyan 2",
+    "Jiren",
+    "Jiren, Full Power",
+    "Toppo",
+    "Toppo, God of Destruction",
+    "Dyspo",
+    "Bergamo",
+    "Ribrianne",
+    "Kakunsa",
+    "Roasie",
+    "Anilaza",
+
+    // ===== DLC: SUPER HERO (11) =====
+    "Gohan (Super Hero)",
+    "Gohan (Super Hero), Super Saiyan",
+    "Ultimate Gohan (Super Hero)",
+    "Gohan Beast",
+    "Piccolo (Super Hero)",
+    "Piccolo (Super Hero), Power Awakening",
+    "Orange Piccolo",
+    "Orange Piccolo, Giant Form",
+    "Gamma 1",
+    "Gamma 2",
+    "Cell Max",
+
+    // ===== DLC: DAIMA PACK 1 (8) =====
+    "Goku (Mini), Super Saiyan",
+    "Vegeta (Mini)",
+    "Vegeta (Mini), Super Saiyan",
+    "Vegeta (Mini), Super Saiyan 2",
+    "Vegeta (Mini), Super Saiyan 3",
+    "Glorio",
+    "Panzy",
+    "Majin Kuu",
+
+    // ===== DLC: DAIMA PACK 2 (6) =====
+    "Goku (Mini), Super Saiyan 4",
+    "Goku (DAIMA), Super Saiyan 4",
+    "Vegeta (DAIMA), Super Saiyan 3",
+    "Majin Duu",
+    "Third Eye Gomah",
+    "Giant Gomah",
+
+    // ===== DLC: SHALLOT (1) =====
+    "Shallot"
+  ];
+
+  // ==========================================================
+  // REGRAS
+  // ==========================================================
+  const POOLS = {
+    mode: [
+      {k:"draft", name:"Draft alternado", text:"Cada um escolhe 1 principal livre. Depois escolhem alternando até completar o time (sem repetir personagens)."},
+      {k:"random", name:"Aleatório total", text:"Todos os slots devem ser sorteados (ou 3 aleatórios + 2 escolhidos)."},
+      {k:"theme", name:"Tema obrigatório", text:"Sorteiem um tema e montem o time respeitando o tema."},
+      {k:"points", name:"Sistema de pontos", text:"Limite de pontos no time (vocês definem a tabela)."},
+      {k:"inverse", name:"Time invertido", text:"Você monta o time do adversário e ele monta o seu."},
+      {k:"mirror", name:"Espelho", text:"Os dois devem usar o MESMO time (mesma ordem)."},
+      {k:"ban", name:"Ban & Pick", text:"Cada um bane 2 personagens antes de escolher."},
+      {k:"king", name:"Rei do Ringue", text:"Um por vez: quem perde troca; quem vence continua."}
+    ],
+    team: [
+      {k:"5", name:"5 personagens", text:"Time completo."},
+      {k:"3", name:"Apenas 3", text:"Mais rápido e menos saturação."},
+      {k:"1+4", name:"1 main + 4", text:"Escolha 1 main; o resto deve ser diferente do que vocês sempre pegam."},
+      {k:"noTransform", name:"Sem transformação", text:"Proibido transformar durante a luta."},
+      {k:"mono", name:"Mesma saga", text:"Todos do time na mesma saga/arco (vocês definem)."}
+    ],
+    restrict: [
+      {k:"noFusion", name:"Sem fusões", text:"Nada de fusões (Gogeta/Vegito/etc.)."},
+      {k:"noGod", name:"Sem divinos/UI", text:"Sem UI e/ou deuses (vocês definem o que entra)."},
+      {k:"noRepeatLine", name:"Sem repetir linha", text:"Se alguém pega Goku (qualquer), o outro não pega outro Goku (e o mesmo pra Vegeta, etc.)."},
+      {k:"baseOnly", name:"Somente base", text:"Só versões base (sem SSJ/forma final)."},
+      {k:"noTopTier", name:"Sem top tier", text:"Proibido usar os 10 mais fortes do meta de vocês."}
+    ],
+    mod: [
+      {k:"loserSwap", name:"Perdeu troca", text:"Quem perder deve trocar 2 personagens (ou o time todo)."},
+      {k:"startWeak", name:"Começar fraco", text:"Obrigatório começar com o personagem mais fraco do time."},
+      {k:"swapOnKO", name:"Troca no KO", text:"Só pode trocar após perder 1 (KO)."},
+      {k:"noSameSpecial", name:"Sem repetir especial", text:"Não pode usar o mesmo especial duas vezes seguidas com o mesmo personagem."},
+      {k:"winnerBans", name:"Vencedor bane 1", text:"Vencedor bane 1 personagem do perdedor pro próximo jogo."},
+      {k:"timer", name:"Pressão 20s", text:"Escolha de time: 20s. Passou, slot vira aleatório."}
+    ],
+    themes: [
+      "Só vilões","Só heróis","Só Sayajins","Só androides","Dragon Ball clássico",
+      "Saga Cell","Saga Majin Boo","Nomekusei/Freeza","Rivais do Goku","Só humanos"
+    ]
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(()=> t.style.display = "none", 2200);
+  }
+
+  function normalizeName(s){
+    return (s||"").replace(/\s+/g," ").trim();
+  }
+
+  function uniq(arr){
+    const seen = new Set();
+    const out = [];
+    for(const raw of arr){
+      const s = normalizeName(raw);
+      if(!s) continue;
+      const key = s.toLowerCase();
+      if(seen.has(key)) continue;
+      seen.add(key);
+      out.push(s);
+    }
+    return out;
+  }
+
+  function tokenizeCSV(s){
+    return (s||"").split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
+  }
+
+  function weightedPick(arr, mode){
+    const weights = arr.map(x=>{
+      let w = 1;
+      if(mode === "competitive"){
+        if(["inverse","random","king"].includes(x.k)) w *= 0.7;
+        if(["draft","ban","mirror","points"].includes(x.k)) w *= 1.3;
+      }
+      if(mode === "chaos"){
+        if(["inverse","random","king"].includes(x.k)) w *= 1.35;
+        if(["mirror","points"].includes(x.k)) w *= 0.8;
+      }
+      return w;
+    });
+    const total = weights.reduce((a,b)=>a+b,0);
+    let r = Math.random() * total;
+    for(let i=0;i<arr.length;i++){
+      r -= weights[i];
+      if(r <= 0) return arr[i];
+    }
+    return arr[arr.length-1];
+  }
+
+  // ==========================================================
+  // ✅ Roster local + custom (localStorage)
+  // ==========================================================
+  const LS_CUSTOM = "sparking_chars_custom_v3";
+
+  function getCustomRoster(){
+    return uniq(JSON.parse(localStorage.getItem(LS_CUSTOM) || "[]"));
+  }
+  function addCustomName(name){
+    const cur = getCustomRoster();
+    cur.push(name);
+    const next = uniq(cur);
+    localStorage.setItem(LS_CUSTOM, JSON.stringify(next));
+    return next;
+  }
+  function clearCustom(){
+    localStorage.removeItem(LS_CUSTOM);
+  }
+
+  let ROSTER = [];
+
+  function setRoster(list, source){
+    ROSTER = uniq(list);
+    $("rosterCount").textContent = String(ROSTER.length);
+    $("rosterSource").textContent = source || "embutido";
+    rebuildReel();
+  }
+
+  function loadEmbeddedRoster(){
+    const custom = getCustomRoster();
+    setRoster(uniq(STATIC_ROSTER.concat(custom)), "embutido");
+  }
+
+  // ==========================================================
+  // Times
+  // ==========================================================
+  function getFilteredRoster(){
+    let arr = ROSTER.slice();
+    const f = tokenizeCSV($("cfgFilter").value);
+    const ex = tokenizeCSV($("cfgExclude").value);
+
+    if(f.length){
+      arr = arr.filter(n=>{
+        const low = n.toLowerCase();
+        return f.some(t => low.includes(t));
+      });
+    }
+    if(ex.length){
+      arr = arr.filter(n=>{
+        const low = n.toLowerCase();
+        return !ex.some(t => low.includes(t));
+      });
+    }
+    return arr;
+  }
+
+  function pickRandomFrom(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function renderTeams(A, B){
+    const elA = $("teamA"), elB = $("teamB");
+    elA.innerHTML = ""; elB.innerHTML = "";
+    A.forEach(n=>{ const li=document.createElement("li"); li.textContent=n; elA.appendChild(li); });
+    B.forEach(n=>{ const li=document.createElement("li"); li.textContent=n; elB.appendChild(li); });
+    $("metaA").textContent = A.length ? `Slots: ${A.length}` : "—";
+    $("metaB").textContent = B.length ? `Slots: ${B.length}` : "—";
+  }
+
+  function generateTeams(){
+    const slots = parseInt($("cfgSlots").value, 10);
+    const allowAcross = $("cfgAllowAcross").value === "yes";
+    const roster = getFilteredRoster();
+
+    if(!roster.length){
+      toast("Lista vazia pelo filtro/excluir.");
+      return {A:[], B:[]};
+    }
+
+    const need = allowAcross ? slots : slots * 2;
+    if(roster.length < need){
+      toast("Poucos personagens no filtro atual.");
+      return {A:[], B:[]};
+    }
+
+    const pool = roster.slice();
+    const A = [], B = [];
+    function takeOne(){
+      const idx = Math.floor(Math.random() * pool.length);
+      return pool.splice(idx, 1)[0];
+    }
+
+    for(let i=0;i<slots;i++) A.push(allowAcross ? pickRandomFrom(roster) : takeOne());
+    for(let i=0;i<slots;i++) B.push(allowAcross ? pickRandomFrom(roster) : takeOne());
+
+    renderTeams(A,B);
+    return {A,B};
+  }
+
+  // ==========================================================
+  // Rules
+  // ==========================================================
+  let lastRule = null;
+  let lastTeams = {A:[], B:[]};
+
+  function genRule(){
+    const preset = $("cfgMode").value;
+
+    const mode = weightedPick(POOLS.mode, preset);
+    const team = weightedPick(POOLS.team, preset);
+    const restrict = weightedPick(POOLS.restrict, preset);
+    const mod = weightedPick(POOLS.mod, preset);
+
+    let extra = "";
+    let extraShort = "";
+    if(mode.k === "theme"){
+      const th = pickRandomFrom(POOLS.themes);
+      extra = "\nTema: " + th;
+      extraShort = "\nTema: " + th;
+    }
+
+    $("pillMode").textContent = mode.name;
+    $("pillTeam").textContent = team.name;
+    $("pillRestrict").textContent = restrict.name;
+    $("pillMod").textContent = mod.name;
+
+    const full =
+`Modo: ${mode.name}
+- ${mode.text}
+
+Formato do time: ${team.name}
+- ${team.text}
+
+Restrição: ${restrict.name}
+- ${restrict.text}
+
+Modificador: ${mod.name}
+- ${mod.text}${extra}
+
+Dica rápida:
+- Se ficar impossível, rerolle só 1 categoria e mantenha o resto.`;
+
+    const summary =
+`Modo: ${mode.name}
+Time: ${team.name}
+Restrição: ${restrict.name}
+Modificador: ${mod.name}${extraShort}`;
+
+    $("topRuleText").textContent = summary;
+    $("ruleBox").value = full;
+    lastRule = full;
+    return full;
+  }
+
+  // ==========================================================
+  // Roulette (snap perfeito)
+  // ==========================================================
+  const REEL_ROWS = 40;
+  const ROW_H = 48;
+  const VISIBLE_ROWS = 5;
+  const CENTER_INDEX = Math.floor(VISIBLE_ROWS / 2); // 2
+  let reelList = [];
+  let spinning = false;
+  let currentChoice = null;
+
+  function rebuildReel(){
+    const roster = getFilteredRoster();
+    reelList = roster.length ? roster : (ROSTER.length ? ROSTER : STATIC_ROSTER);
+
+    const reel = $("reel");
+    reel.innerHTML = "";
+    for(let i=0;i<REEL_ROWS;i++){
+      const row = document.createElement("div");
+      row.className = "reelRow";
+      row.textContent = pickRandomFrom(reelList);
+      reel.appendChild(row);
+    }
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0px)";
+    requestAnimationFrame(()=> reel.style.transition = "");
+  }
+
+  function spinOnce(){
+    if(spinning) return;
+    spinning = true;
+
+    if(!reelList.length){
+      toast("Lista vazia.");
+      spinning = false;
+      return;
+    }
+
+    const reel = $("reel");
+    const rows = Array.from(reel.children);
+
+    for(let i=0;i<rows.length;i++){
+      rows[i].textContent = pickRandomFrom(reelList);
+    }
+
+    const chosen = pickRandomFrom(reelList);
+    currentChoice = chosen;
+
+    const targetRowIndex = Math.floor(REEL_ROWS * 0.65) + Math.floor(Math.random() * 6);
+    rows[targetRowIndex].textContent = chosen;
+
+    const finalY = (CENTER_INDEX * ROW_H) - (targetRowIndex * ROW_H);
+
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0px)";
+
+    requestAnimationFrame(()=>{
+      reel.style.transition = "transform 1200ms cubic-bezier(.12,.85,.12,1)";
+      reel.style.transform = `translateY(${finalY}px)`;
+    });
+
+    setTimeout(()=>{
+      $("spinResult").textContent = "Resultado: " + chosen;
+      toast("Saiu: " + chosen);
+      spinning = false;
+    }, 1250);
+  }
+
+  function pushSpinToTeam(teamKey){
+    const slots = parseInt($("cfgSlots").value, 10);
+    if(!currentChoice){
+      toast("Gire a roleta primeiro.");
+      return;
+    }
+    const t = (lastTeams[teamKey] || []).slice();
+    if(t.length >= slots){
+      toast("Esse time já está cheio.");
+      return;
+    }
+    t.push(currentChoice);
+    lastTeams = {...lastTeams, [teamKey]: t};
+    renderTeams(lastTeams.A || [], lastTeams.B || []);
+  }
+
+  // ==========================================================
+  // Copy
+  // ==========================================================
+  async function copyAll(){
+    const rule = lastRule || $("ruleBox").value || "";
+    const A = lastTeams.A || [];
+    const B = lastTeams.B || [];
+    const teamsTxt = (A.length && B.length)
+      ? `\n\nTimes\nA: ${A.join(" | ")}\nB: ${B.join(" | ")}`
+      : "";
+    const text = rule + teamsTxt;
+
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("Copiado!");
+    }catch{
+      $("ruleBox").focus();
+      $("ruleBox").select();
+      document.execCommand("copy");
+      toast("Copiado (fallback)!");
+    }
+  }
+
+  // ==========================================================
+  // Events
+  // ==========================================================
+  $("btnGenRule").addEventListener("click", ()=> genRule());
+  $("btnGenTeams").addEventListener("click", ()=> { lastTeams = generateTeams(); });
+  $("btnCopyAll").addEventListener("click", copyAll);
+
+  $("btnSpinOne").addEventListener("click", ()=> spinOnce());
+  $("btnSpinToA").addEventListener("click", ()=> { spinOnce(); setTimeout(()=> pushSpinToTeam("A"), 1300); });
+  $("btnSpinToB").addEventListener("click", ()=> { spinOnce(); setTimeout(()=> pushSpinToTeam("B"), 1300); });
+
+  $("cfgFilter").addEventListener("input", ()=> rebuildReel());
+  $("cfgExclude").addEventListener("input", ()=> rebuildReel());
+
+  // ✅ agora só “recarrega” a lista embutida + custom
+  $("btnUpdateRoster").addEventListener("click", ()=> {
+    loadEmbeddedRoster();
+    toast("Recarregado (embutido).");
+  });
+
+  $("btnAddChar").addEventListener("click", ()=>{
+    const name = normalizeName($("addName").value);
+    if(!name) return;
+    const custom = addCustomName(name);
+    setRoster(uniq(STATIC_ROSTER.concat(custom)), "embutido");
+    $("addName").value = "";
+    toast("Adicionado!");
+  });
+
+  $("btnClearCustom").addEventListener("click", ()=>{
+    clearCustom();
+    toast("Custom limpo.");
+    loadEmbeddedRoster();
+  });
+
+  $("btnAddToHome").addEventListener("click", ()=>{
+    alert(
+`iPhone:
+Use o Safari (não o browser dentro do app).
+No Safari: Compartilhar → Adicionar à Tela de Início.`
+    );
+  });
+
+  $("btnResetAll").addEventListener("click", ()=>{
+    if(!confirm("Resetar TUDO (custom, etc.)?")) return;
+    localStorage.removeItem(LS_CUSTOM);
+    location.reload();
+  });
+
+  // ==========================================================
+  // Boot
+  // ==========================================================
+  (function boot(){
+    loadEmbeddedRoster(); // ✅ aqui já vai aparecer 208 (ou 208 + custom)
+    genRule();
+    lastTeams = generateTeams();
+  })();
+</script>
+</body>
+</html>
